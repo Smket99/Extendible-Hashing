@@ -8,11 +8,13 @@ import javax.swing.JOptionPane;
  * @author Smiket Barodia 03.04.2020
  */
 public class GUI extends javax.swing.JFrame {
+    HashMap<String, List<Integer>> hm = new HashMap<>();// Initializing HashMap
+    List<Integer> keys = new ArrayList<>(); //Initializing a global List
+    int[] ld = new int[500];
+    public Integer xin;
     public void codeUtil()
     {
-        HashMap<String, List<Integer>> hm = new HashMap<>();
         int gd = 1, bfr = 3;  //Global Depth = 1 , Bfr=3
-        int[] ld = new int[500];
         int flag_display=0;
         Arrays.fill(ld, 1);//Local Depth = 1
         for (int i = 0; i < (int) Math.pow(2, gd); i++) {   //All possible HashValues
@@ -20,11 +22,11 @@ public class GUI extends javax.swing.JFrame {
             String hashval = binary(i, gd);
             List<Integer> ll = new ArrayList<>();
             ListIterator<Integer> it = keys.listIterator();
-            if(gd>100)
-            {JOptionPane.showMessageDialog(null, "CANNOT ADD "+xin);
-            keys.remove(xin);
-            flag_display=1;
-             break;
+            if(ld[i]>bfr+1){
+                JOptionPane.showMessageDialog(null, "CANNOT ADD "+xin);
+                keys.remove(xin);
+                flag_display=1;
+                break;
             }
             while (it.hasNext()) {  //traversing List
                 int k = it.next();
@@ -32,12 +34,9 @@ public class GUI extends javax.swing.JFrame {
                 if (hashval.equals(h) || h.equals(hashval.substring(gd - ld[i], gd))) {
                     ll.add(k);
                     if (ll.size() > bfr) {
-                        if (gd <= ld[i]) {
+                        if (gd <= ld[i]) 
                             gd++;
-                            ld[i]++;
-                        } else {
-                            ld[i]++;
-                        }
+                        ld[i]++;
                         flag = 1;
                         i = -1;
                         hm.clear();
@@ -45,9 +44,8 @@ public class GUI extends javax.swing.JFrame {
                     }
                 }
             }
-            if (flag == 0) {
+            if (flag == 0)
                 hm.put(hashval, ll);
-            }
         }
         if(flag_display==0)
         {
@@ -76,7 +74,7 @@ public class GUI extends javax.swing.JFrame {
         }
         keyval.setText("");
     }
-    public static int isNumeric(String strNum) {
+    public static int isNumeric(String strNum) {    //To check valid key Input
     if (strNum == null) {
         return 0;
     }
@@ -99,9 +97,21 @@ public class GUI extends javax.swing.JFrame {
         if(keys.contains(sear))
         {
             int gd=Integer.parseInt(global.getText());
-            String hashval=binary(sear, gd);
-            int len=hashval.length();
-            textArea.setText(sear+" IS PRESENT IN DIRECTORY "+hashval.substring(len-gd,len));
+            String dir="";
+            int flag=0;
+            for (Map.Entry<String, List<Integer>> ml : hm.entrySet()) {
+            String str = ml.getKey();
+            List<Integer>lsearch=ml.getValue();
+            if(lsearch.contains(sear))
+            { 
+                if(flag>0)
+                    dir=dir+", ";
+                dir=dir+ml.getKey();
+                flag++;
+            }
+            
+        }
+            textArea.setText(sear+" IS PRESENT IN DIRECTORY "+dir);
         }
         else
             textArea.setText(sear+" IS NOT PRESENT");
@@ -112,9 +122,9 @@ public class GUI extends javax.swing.JFrame {
         String hashvalue = bin.substring(bin.length() - gdk, bin.length());
         return hashvalue;
     }
-    static String binary(int x, int gdk) //returns padded binary representation
+    public String binary(int x, int gdk) //returns padded binary representation
     {
-        String bin = Integer.toBinaryString(x%100);  //Hash Function
+        String bin = Integer.toBinaryString(x%10);  //Hash Function
         if (bin.length() < gdk) {
             while (bin.length() != gdk) {
                 bin = "0" + bin;
@@ -137,18 +147,16 @@ public class GUI extends javax.swing.JFrame {
         }
         keyval.setText("");
     }
-    public void clear()
+    public void Clear()
     {
-        keys.clear();
-        codeUtil();
+        this.dispose();
+        main(null);
     }
-    List<Integer> keys = new ArrayList<>(); //Initializing a global List
-    public Integer xin;
     public GUI() {
         initComponents();
     }
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
@@ -378,56 +386,60 @@ public class GUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         System.exit(0);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                        
 
-    private void displayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayMouseClicked
+    private void displayMouseClicked(java.awt.event.MouseEvent evt) {                                     
         codeUtil();
-    }//GEN-LAST:event_displayMouseClicked
+    }                                    
 
-    private void searchbutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchbutMouseClicked
+    private void searchbutMouseClicked(java.awt.event.MouseEvent evt) {                                       
         search();
-    }//GEN-LAST:event_searchbutMouseClicked
+    }                                      
 
-    private void globalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_globalKeyPressed
+    private void globalKeyPressed(java.awt.event.KeyEvent evt) {                                  
 
-    }//GEN-LAST:event_globalKeyPressed
+    }                                 
 
-    private void hashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hashMouseClicked
+    private void hashMouseClicked(java.awt.event.MouseEvent evt) {                                  
         code();
-    }//GEN-LAST:event_hashMouseClicked
+    }                                 
 
-    private void keyvalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyvalKeyPressed
+    private void keyvalKeyPressed(java.awt.event.KeyEvent evt) {                                  
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
-        code();
+            code();
         else if(evt.getKeyCode()==17)
-        search();
+            search();
         else if(evt.getKeyCode()==16)
-        codeUtil();
-    }//GEN-LAST:event_keyvalKeyPressed
+            codeUtil();
+        else if(evt.getKeyCode()==127)
+            Delete();
+        else if(evt.getKeyCode()==27)
+            Clear();
+    }                                 
 
-    private void keyvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keyvalActionPerformed
+    private void keyvalActionPerformed(java.awt.event.ActionEvent evt) {                                       
         // TODO add your handling code here:
-    }//GEN-LAST:event_keyvalActionPerformed
+    }                                      
 
-    private void deletebutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletebutMouseClicked
+    private void deletebutMouseClicked(java.awt.event.MouseEvent evt) {                                       
         Delete();
-    }//GEN-LAST:event_deletebutMouseClicked
+    }                                      
 
-    private void deletebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletebutActionPerformed
+    private void deletebutActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-    }//GEN-LAST:event_deletebutActionPerformed
+    }                                         
 
-    private void ClearbutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearbutMouseClicked
-        clear();
-    }//GEN-LAST:event_ClearbutMouseClicked
+    private void ClearbutMouseClicked(java.awt.event.MouseEvent evt) {                                      
+        Clear();
+    }                                     
 
-    private void ClearbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearbutActionPerformed
+    private void ClearbutActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_ClearbutActionPerformed
+    }                                        
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             GUI gui = new GUI();
@@ -435,7 +447,7 @@ public class GUI extends javax.swing.JFrame {
             gui.setLocationRelativeTo(null);
         });
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton Clearbut;
     private javax.swing.JButton deletebut;
     private javax.swing.JButton display;
@@ -450,5 +462,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField keyval;
     private javax.swing.JButton searchbut;
     private javax.swing.JTextArea textArea;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
