@@ -12,15 +12,19 @@ public class GUI extends javax.swing.JFrame {
     List<Integer> keys = new ArrayList<>(); //Initializing a global List
     int[] ld = new int[500];
     public Integer xin;
+    public Integer gd=1,bfr=3;//Global Depth = 1 , Bfr=3
     public void codeUtil()
     {
-        int gd = 1, bfr = 3;  //Global Depth = 1 , Bfr=3
+        hm.clear();
+        gd = 1;
         int flag_display=0;
         Arrays.fill(ld, 1);//Local Depth = 1
         for (int i = 0; i < (int) Math.pow(2, gd); i++) {   //All possible HashValues
             int flag = 0;
+            String key_hash=binary(i,gd);
             String hashval = binary(i, gd);
             List<Integer> ll = new ArrayList<>();
+            hm.put(key_hash, ll);
             ListIterator<Integer> it = keys.listIterator();
             if(ld[i]>bfr+1){
                 JOptionPane.showMessageDialog(null, "CANNOT ADD "+xin);
@@ -30,7 +34,7 @@ public class GUI extends javax.swing.JFrame {
             }
             while (it.hasNext()) {  //traversing List
                 int k = it.next();
-                String h = hash(binary(k, ld[i]), ld[i]);
+                String h = hash(binary(k%10, ld[i]), ld[i]);
                 if (hashval.equals(h) || h.equals(hashval.substring(gd - ld[i], gd))) {
                     ll.add(k);
                     if (ll.size() > bfr) {
@@ -44,7 +48,7 @@ public class GUI extends javax.swing.JFrame {
                     }
                 }
             }
-            if (flag == 0)
+            //if (flag == 0)
                 hm.put(hashval, ll);
         }
         if(flag_display==0)
@@ -96,7 +100,7 @@ public class GUI extends javax.swing.JFrame {
             sear=Integer.parseInt(keyval.getText());
         if(keys.contains(sear))
         {
-            int gd=Integer.parseInt(global.getText());
+            //int gd=Integer.parseInt(global.getText());
             String dir="";
             int flag=0;
             for (Map.Entry<String, List<Integer>> ml : hm.entrySet()) {
@@ -124,7 +128,7 @@ public class GUI extends javax.swing.JFrame {
     }
     public String binary(int x, int gdk) //returns padded binary representation
     {
-        String bin = Integer.toBinaryString(x%10);  //Hash Function
+        String bin = Integer.toBinaryString(x);  //Hash Function
         if (bin.length() < gdk) {
             while (bin.length() != gdk) {
                 bin = "0" + bin;
@@ -173,6 +177,7 @@ public class GUI extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         deletebut = new javax.swing.JButton();
         Clearbut = new javax.swing.JButton();
+        getkeys = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -317,52 +322,77 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        getkeys.setBackground(new java.awt.Color(0, 0, 0));
+        getkeys.setFont(new java.awt.Font("Ebrima", 1, 36)); // NOI18N
+        getkeys.setForeground(new java.awt.Color(0, 255, 255));
+        getkeys.setText("KEYS");
+        getkeys.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(255, 255, 255)));
+        getkeys.setOpaque(false);
+        getkeys.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                getkeysMouseClicked(evt);
+            }
+        });
+        getkeys.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getkeysActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(173, 173, 173)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(keyval, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addComponent(Clearbut, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(global, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(152, 152, 152)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(103, 103, 103)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(display, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100)
-                .addComponent(deletebut, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97)
-                .addComponent(searchbut, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93)
-                .addComponent(hash, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(display, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)
+                        .addComponent(deletebut, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(97, 97, 97)
+                        .addComponent(searchbut, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)
+                        .addComponent(hash, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(keyval, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46)
+                                .addComponent(getkeys, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Clearbut, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(global, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(13, 13, 13)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(keyval, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(Clearbut, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(Clearbut, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(getkeys, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3)
                             .addComponent(global, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,6 +470,14 @@ public class GUI extends javax.swing.JFrame {
     private void ClearbutActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
     }                                        
+
+    private void getkeysMouseClicked(java.awt.event.MouseEvent evt) {                                     
+       textArea.setText(keys.toString());
+    }                                    
+
+    private void getkeysActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             GUI gui = new GUI();
@@ -451,6 +489,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton Clearbut;
     private javax.swing.JButton deletebut;
     private javax.swing.JButton display;
+    private javax.swing.JButton getkeys;
     private javax.swing.JTextField global;
     private javax.swing.JButton hash;
     private javax.swing.JButton jButton1;
