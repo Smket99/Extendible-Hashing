@@ -13,6 +13,7 @@ public class GUI extends javax.swing.JFrame {
     int[] ld = new int[500];
     public Integer xin;
     public Integer gd=1,bfr=3;//Global Depth = 1 , Bfr=3
+    public Integer mod=(int)Math.pow(2,gd);
     public void codeUtil()
     {
         hm.clear();
@@ -20,21 +21,20 @@ public class GUI extends javax.swing.JFrame {
         int flag_display=0;
         Arrays.fill(ld, 1);//Local Depth = 1
         for (int i = 0; i < (int) Math.pow(2, gd); i++) {   //All possible HashValues
-            int flag = 0;
             String key_hash=binary(i,gd);
             String hashval = binary(i, gd);
             List<Integer> ll = new ArrayList<>();
             hm.put(key_hash, ll);
             ListIterator<Integer> it = keys.listIterator();
-            if(ld[i]>bfr+1){
-                JOptionPane.showMessageDialog(null, "CANNOT ADD "+xin);
-                keys.remove(xin);
-                flag_display=1;
-                break;
-            }
+//            if(ld[i]>bfr+1){
+//                JOptionPane.showMessageDialog(null, "CANNOT ADD "+xin);
+//                keys.remove(xin);
+//                flag_display=1;
+//                break;
+//            }
             while (it.hasNext()) {  //traversing List
                 int k = it.next();
-                int mod=(int)Math.pow(2,gd);
+                mod=(int)Math.pow(2,gd);
                 String h = hash(binary(k%mod, ld[i]), ld[i]);
                 if (hashval.equals(h) || h.equals(hashval.substring(gd - ld[i], gd))) {
                     ll.add(k);
@@ -42,20 +42,19 @@ public class GUI extends javax.swing.JFrame {
                         if (gd <= ld[i]) 
                             gd++;
                         ld[i]++;
-                        flag = 1;
                         i = -1;
                         hm.clear();
                         break;
                     }
                 }
             }
-            //if (flag == 0)
-                hm.put(hashval, ll);
+            hm.put(hashval, ll);
         }
         if(flag_display==0)
         {
         Map<String, List<Integer>> map = new TreeMap<>(hm);
         global.setText(Integer.toString(gd));
+        modtext.setText(Integer.toString(mod));
         String stk = "Directory\tBuckets\tLocal Depth\n";
         for (Map.Entry<String, List<Integer>> ml : map.entrySet()) {
             String str = ml.getKey();
@@ -101,7 +100,6 @@ public class GUI extends javax.swing.JFrame {
             sear=Integer.parseInt(keyval.getText());
         if(keys.contains(sear))
         {
-            //int gd=Integer.parseInt(global.getText());
             String dir="\t";
             int flag=0;
             for (Map.Entry<String, List<Integer>> ml : hm.entrySet()) {
@@ -151,7 +149,7 @@ public class GUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,del+" IS NOT PRESENT");
         }
         keyval.setText("");
-    }
+    }   
     public void Clear()
     {
         this.dispose();
@@ -161,9 +159,10 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
           global.setText(Integer.toString(gd));
         buksize.setText(Integer.toString(bfr));
+        modtext.setText(Integer.toString(mod));
     }
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
@@ -184,6 +183,8 @@ public class GUI extends javax.swing.JFrame {
         getkeys = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         buksize = new javax.swing.JTextField();
+        modtext = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
@@ -247,6 +248,11 @@ public class GUI extends javax.swing.JFrame {
         global.setForeground(new java.awt.Color(255, 255, 255));
         global.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         global.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(255, 255, 255)));
+        global.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                globalActionPerformed(evt);
+            }
+        });
         global.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 globalKeyPressed(evt);
@@ -323,7 +329,6 @@ public class GUI extends javax.swing.JFrame {
         Clearbut.setForeground(new java.awt.Color(255, 255, 0));
         Clearbut.setText("CLEAR");
         Clearbut.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(255, 255, 255)));
-        Clearbut.setOpaque(false);
         Clearbut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ClearbutMouseClicked(evt);
@@ -369,25 +374,46 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        modtext.setEditable(false);
+        modtext.setBackground(new java.awt.Color(0, 0, 0));
+        modtext.setFont(new java.awt.Font("Ebrima", 1, 56)); // NOI18N
+        modtext.setForeground(new java.awt.Color(255, 255, 255));
+        modtext.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        modtext.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(255, 255, 255)));
+        modtext.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                modtextKeyPressed(evt);
+            }
+        });
+
+        jLabel5.setBackground(new java.awt.Color(26, 24, 2));
+        jLabel5.setFont(new java.awt.Font("DialogInput", 3, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("MOD->");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buksize, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(keyval, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(keyval, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buksize, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(global, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(global, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(modtext, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(Clearbut, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -399,7 +425,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(hash, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(42, 42, 42)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28)
+                .addGap(46, 46, 46)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -414,12 +440,14 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 8, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(buksize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(keyval, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(global, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(keyval, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buksize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modtext, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -450,61 +478,61 @@ public class GUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void buksizeKeyPressed(java.awt.event.KeyEvent evt) {                                   
+    private void buksizeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buksizeKeyPressed
         // TODO add your handling code here:
-    }                                  
+    }//GEN-LAST:event_buksizeKeyPressed
 
-    private void getkeysActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void getkeysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getkeysActionPerformed
         // TODO add your handling code here:
-    }                                       
+    }//GEN-LAST:event_getkeysActionPerformed
 
-    private void getkeysMouseClicked(java.awt.event.MouseEvent evt) {                                     
+    private void getkeysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getkeysMouseClicked
         textArea.setText(keys.toString());
-    }                                    
+    }//GEN-LAST:event_getkeysMouseClicked
 
-    private void ClearbutActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void ClearbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearbutActionPerformed
         // TODO add your handling code here:
-    }                                        
+    }//GEN-LAST:event_ClearbutActionPerformed
 
-    private void ClearbutMouseClicked(java.awt.event.MouseEvent evt) {                                      
+    private void ClearbutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearbutMouseClicked
         Clear();
-    }                                     
+    }//GEN-LAST:event_ClearbutMouseClicked
 
-    private void deletebutActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void deletebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletebutActionPerformed
         // TODO add your handling code here:
-    }                                         
+    }//GEN-LAST:event_deletebutActionPerformed
 
-    private void deletebutMouseClicked(java.awt.event.MouseEvent evt) {                                       
+    private void deletebutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletebutMouseClicked
         Delete();
-    }                                      
+    }//GEN-LAST:event_deletebutMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         System.exit(0);
-    }                                        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void displayActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void displayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayActionPerformed
         // TODO add your handling code here:
-    }                                       
+    }//GEN-LAST:event_displayActionPerformed
 
-    private void displayMouseClicked(java.awt.event.MouseEvent evt) {                                     
+    private void displayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayMouseClicked
         codeUtil();
-    }                                    
+    }//GEN-LAST:event_displayMouseClicked
 
-    private void searchbutMouseClicked(java.awt.event.MouseEvent evt) {                                       
+    private void searchbutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchbutMouseClicked
         search();
-    }                                      
+    }//GEN-LAST:event_searchbutMouseClicked
 
-    private void globalKeyPressed(java.awt.event.KeyEvent evt) {                                  
+    private void globalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_globalKeyPressed
 
-    }                                 
+    }//GEN-LAST:event_globalKeyPressed
 
-    private void hashMouseClicked(java.awt.event.MouseEvent evt) {                                  
+    private void hashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hashMouseClicked
         code();
-    }                                 
+    }//GEN-LAST:event_hashMouseClicked
 
-    private void keyvalKeyPressed(java.awt.event.KeyEvent evt) {                                  
+    private void keyvalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyvalKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
         code();
         else if(evt.getKeyCode()==17)
@@ -515,11 +543,19 @@ public class GUI extends javax.swing.JFrame {
         Delete();
         else if(evt.getKeyCode()==27)
         Clear();
-    }                                 
+    }//GEN-LAST:event_keyvalKeyPressed
 
-    private void keyvalActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    private void keyvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keyvalActionPerformed
         // TODO add your handling code here:
-    }                                      
+    }//GEN-LAST:event_keyvalActionPerformed
+
+    private void modtextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_modtextKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_modtextKeyPressed
+
+    private void globalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_globalActionPerformed
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             GUI gui = new GUI();
@@ -527,7 +563,7 @@ public class GUI extends javax.swing.JFrame {
             gui.setLocationRelativeTo(null);
         });
     }
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Clearbut;
     private javax.swing.JTextField buksize;
     private javax.swing.JButton deletebut;
@@ -541,10 +577,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField keyval;
+    private javax.swing.JTextField modtext;
     private javax.swing.JButton searchbut;
     private javax.swing.JTextArea textArea;
-    // End of variables declaration                   
+    // End of variables declaration//GEN-END:variables
 }
