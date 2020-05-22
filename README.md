@@ -1,3 +1,4 @@
 # DBS
-DBS Project Module 2
-Java Implementation of Extendible Hashing 
+##Java Implementation of Extendible Hashing Algorithm
+###mod function=2^(global depth)
+###bfr gd and ld modifiable 
